@@ -201,8 +201,8 @@ static const CGFloat        LNPopupBarGestureSnapOffset = 40;
 	bottomBarFrame.origin.y += (percent * bottomBarFrame.size.height);
 	_bottomBar.frame = bottomBarFrame;
 	
-	[_popupBar.toolbar setAlpha:1.0 - percent];
-	[_popupBar.progressView setAlpha:1.0 - percent];
+    [_popupBar.toolbar setAlpha:1.0 - (percent * 0.75)];
+    [_popupBar.progressView setAlpha:1.0 - (percent * 0.75)];
 	
 	CGRect contentFrame = _containerController.view.bounds;
 	contentFrame.origin.x = _popupBar.frame.origin.x;
