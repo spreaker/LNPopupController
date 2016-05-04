@@ -13,6 +13,7 @@
 static const CFTimeInterval LNPopupBarGesturePanThreshold = 0.1;
 static const CFTimeInterval LNPopupBarGestureHeightPercentThreshold = 0.2;
 static const CGFloat        LNPopupBarGestureSnapOffset = 40;
+static const CGFloat        LNPopupBarGestureSnapOffsetIPad = 50;
 
 @interface _LNPopupTransitionCoordinator : NSObject <UIViewControllerTransitionCoordinator> @end
 @implementation _LNPopupTransitionCoordinator
@@ -444,7 +445,8 @@ static CGFloat __smoothstep(CGFloat a, CGFloat b, CGFloat x)
 			BOOL heightTreshold = [self _percentFromPopupBar] > LNPopupBarGestureHeightPercentThreshold;
 			BOOL isPanUp = [pgr velocityInView:_containerController.view].y < 0;
             CGPoint translationInSuperView = [pgr translationInView:_popupBar.superview];
-            BOOL hasPassedOffset = translationInSuperView.y > 0 && translationInSuperView.y <= LNPopupBarGestureSnapOffset;
+            BOOL hasPassedOffset = translationInSuperView.y > 0 && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? LNPopupBarGestureSnapOffsetIPad : LNPopupBarGestureSnapOffset;
+            
             
 			if((panThreshold || heightTreshold) && (isPanUp || hasPassedOffset))
 			{
