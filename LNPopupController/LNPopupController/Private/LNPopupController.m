@@ -666,7 +666,7 @@ static CGFloat __smoothstep(CGFloat a, CGFloat b, CGFloat x)
 		[UIView animateWithDuration:animated ? 0.5 : 0.0 delay:0.0 usingSpringWithDamping:500 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^
 		{
 			CGRect barFrame = _popupBar.frame;
-			barFrame.size.height = LNPopupBarHeight;
+			barFrame.size.height = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? LNPopupBarHeightIPad : LNPopupBarHeight;
 			_popupBar.frame = barFrame;
 			_popupBar.frame = [self _frameForClosedPopupBar];
 			

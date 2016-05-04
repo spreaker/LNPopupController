@@ -10,6 +10,7 @@
 #import "__MarqueeLabel.h"
 
 const CGFloat LNPopupBarHeight = 40.0;
+const CGFloat LNPopupBarHeightIPad = 50.0;
 
 const NSInteger LNBarStyleInherit = -1;
 
@@ -35,7 +36,8 @@ const NSInteger LNBarStyleInherit = -1;
 
 - (nonnull instancetype)initWithFrame:(CGRect)frame
 {	
-	CGRect fullFrame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, LNPopupBarHeight);
+    CGRect fullFrame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width,
+            UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? LNPopupBarHeightIPad : LNPopupBarHeight);
 	
 	self = [super initWithFrame:frame];
 	
@@ -272,7 +274,7 @@ const NSInteger LNBarStyleInherit = -1;
 {
 	dispatch_async(dispatch_get_main_queue(), ^{
 		__block CGFloat leftMargin = 0;
-		__block CGFloat rightMargin = self.bounds.size.width;
+		__block CGFloat rightMargin = 0;
 		
 		[self.leftBarButtonItems enumerateObjectsUsingBlock:^(UIBarButtonItem* barButtonItem, NSUInteger idx, BOOL* stop)
 		 {
@@ -283,12 +285,13 @@ const NSInteger LNBarStyleInherit = -1;
 		[self.rightBarButtonItems enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(UIBarButtonItem* barButtonItem, NSUInteger idx, BOOL* stop)
 		 {
 			 UIView* itemView = [barButtonItem valueForKey:@"view"];
-			 rightMargin = itemView.frame.origin.x - 10;
+			 rightMargin = self.bounds.size.width - itemView.frame.origin.x + 10;
 		 }];
 		
+        CGFloat maxMargin = MAX(leftMargin, rightMargin);
 		CGRect frame = _titlesView.frame;
-		frame.origin.x = leftMargin;
-		frame.size.width = rightMargin - leftMargin;
+		frame.origin.x = maxMargin;
+		frame.size.width = self.bounds.size.width - maxMargin - maxMargin;
 		_titlesView.frame = frame;
 		
 		if(_needsLabelsLayout == YES)
@@ -338,11 +341,11 @@ const NSInteger LNBarStyleInherit = -1;
 		[self _setTitleLableFontsAccordingToBarStyleAndTint];
 		
 		CGRect titleLabelFrame = _titlesView.bounds;
-		titleLabelFrame.size.height = 40;
+		titleLabelFrame.size.height = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? LNPopupBarHeightIPad : LNPopupBarHeight;
 		if(_subtitle.length > 0)
 		{
 			CGRect subtitleLabelFrame = _titlesView.bounds;
-			subtitleLabelFrame.size.height = 40;
+			subtitleLabelFrame.size.height = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? LNPopupBarHeightIPad : LNPopupBarHeight;
 			
 			titleLabelFrame.origin.y -= _titleLabel.font.lineHeight / 2;
 			subtitleLabelFrame.origin.y += _subtitleLabel.font.lineHeight / 2;
@@ -471,10 +474,6 @@ const NSInteger LNBarStyleInherit = -1;
 	[items addObject:fixed];
 	
 	CGFloat spacerWidth = 10;
-	if(self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular)
-	{
-		spacerWidth = 20;
-	}
 	
 	[_leftBarButtonItems enumerateObjectsUsingBlock:^(UIBarButtonItem * _Nonnull barButtonItem, NSUInteger idx, BOOL * _Nonnull stop) {
 		[items addObject:barButtonItem];

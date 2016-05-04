@@ -14,6 +14,12 @@ NS_ASSUME_NONNULL_BEGIN
 extern const NSInteger LNBarStyleInherit;
 
 /**
+ * Export the bar height on both target type
+ */
+extern const CGFloat LNPopupBarHeight;
+extern const CGFloat LNPopupBarHeightIPad;
+
+/**
  *  A popup bar is a control that displays popup information. Content is popuplated from LNPopupItem items.
  */
 @interface LNPopupBar : UIView <UIAppearanceContainer>

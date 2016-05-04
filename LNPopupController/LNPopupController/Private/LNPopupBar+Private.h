@@ -8,8 +8,6 @@
 
 #import "LNPopupBar.h"
 
-extern const CGFloat LNPopupBarHeight;
-
 @protocol _LNPopupBarSupport <NSObject>
 
 @property (nonatomic, assign) UIBarStyle barStyle;
