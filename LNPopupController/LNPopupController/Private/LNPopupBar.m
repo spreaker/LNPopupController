@@ -25,9 +25,10 @@ const NSInteger LNBarStyleInherit = -1;
 	
 	UIColor* _userTintColor;
 	UIColor* _userBackgroundColor;
+    UIColor* _userProgressTintColor;
 }
 
-@synthesize barStyle = _userBarStyle, barTintColor = _userBarTintColor;
+@synthesize barStyle = _userBarStyle, barTintColor = _userBarTintColor, progressTintColor = _userProgressTintColor;
 
 - (void)setHighlighted:(BOOL)highlighted
 {
@@ -76,12 +77,10 @@ const NSInteger LNBarStyleInherit = -1;
 		_progressView.translatesAutoresizingMaskIntoConstraints = NO;
 		_progressView.trackImage = [UIImage alloc];
 		[_toolbar addSubview:_progressView];
-		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_progressView(1)]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_progressView)]];
+		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_progressView(2)]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_progressView)]];
 		[self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_progressView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_progressView)]];
 		
 		_needsLabelsLayout = YES;
-		
-		self.accessibilityLabel = @"Popup Asshole";
 	}
 	
 	return self;
@@ -136,6 +135,18 @@ const NSInteger LNBarStyleInherit = -1;
 	_backgroundView.barTintColor = _userBarTintColor ?: _systemBarTintColor;
 	
 	[self _setTitleLableFontsAccordingToBarStyleAndTint];
+}
+
+- (UIColor*)progressTintColor
+{
+    return _userProgressTintColor;
+}
+
+- (void)setProgressTintColor:(UIColor *)progressTintColor
+{
+    _userProgressTintColor = progressTintColor;
+    
+    _progressView.tintColor = _userProgressTintColor ?: (_userTintColor ?: _systemTintColor);
 }
 
 - (UIColor *)backgroundColor

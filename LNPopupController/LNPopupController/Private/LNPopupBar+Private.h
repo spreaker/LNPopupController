@@ -12,6 +12,7 @@
 
 @property (nonatomic, assign) UIBarStyle barStyle;
 @property (nonatomic, retain) UIColor* barTintColor;
+@property (nonatomic, retain) UIColor* progressTintColor;
 
 @end
 

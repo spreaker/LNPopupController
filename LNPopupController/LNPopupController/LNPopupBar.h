@@ -52,6 +52,10 @@ extern const CGFloat LNPopupBarHeightIPad;
  */
 @property (nullable, nonatomic, strong) UIColor* barTintColor UI_APPEARANCE_SELECTOR;
 /**
+ *  The tint color to apply to the progress bar.
+ */
+@property (nullable, nonatomic, strong) UIColor* progressTintColor UI_APPEARANCE_SELECTOR;
+/**
  *  The background image to use
  */
 @property (nullable, nonatomic, strong) UIImage* backgroundImage UI_APPEARANCE_SELECTOR;
