@@ -11,6 +11,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, LNPopupCloseButtonPosition) {
+    LNPopupCloseButtonPositionLeft,
+    LNPopupCloseButtonPositionRight,
+};
+
 /**
  *  Holds the popup content container view, as well as the popup close button and the popup interaction gesture recognizer.
  */
@@ -28,6 +33,12 @@ NS_ASSUME_NONNULL_BEGIN
  *  The popup close button.
  */
 @property (nullable, nonatomic, strong, readonly) LNPopupCloseButton* popupCloseButton;
+
+/**
+ *  The position of the popup close button.
+ *  By default, it's on the left.
+ */
+@property (nonatomic, assign) LNPopupCloseButtonPosition popupCloseButtonPosition;
 
 @end
 

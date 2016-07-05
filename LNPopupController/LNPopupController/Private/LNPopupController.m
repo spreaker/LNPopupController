@@ -215,7 +215,16 @@ static const CGFloat        LNPopupBarGestureSnapOffsetIPad = 50;
 	
 	[self.popupContentView.popupCloseButton sizeToFit];
 	CGRect popupCloseButtonFrame = self.popupContentView.popupCloseButton.frame;
-	popupCloseButtonFrame.origin.x = 12;
+    switch (self.popupContentView.popupCloseButtonPosition) {
+    case LNPopupCloseButtonPositionRight:
+        popupCloseButtonFrame.origin.x = contentFrame.size.width - popupCloseButtonFrame.size.width - 12;
+        break;
+        
+    case LNPopupCloseButtonPositionLeft:
+    default:
+        popupCloseButtonFrame.origin.x = 12;
+        break;
+    }
 	popupCloseButtonFrame.origin.y = 12 + ([UIApplication sharedApplication].isStatusBarHidden ? 0 : [UIApplication sharedApplication].statusBarFrame.size.height);
 	if([_currentContentController isKindOfClass:[UINavigationController class]] && [(UINavigationController*)_currentContentController isNavigationBarHidden] == NO)
 	{
