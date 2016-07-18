@@ -17,4 +17,11 @@
  */
 @property (nonatomic, strong, readonly) UIVisualEffectView* backgroundView;
 
+/**
+ *  Adjust area that can intercept touches.
+ *  
+ *  Use negative values to make the touch area bigger. Default value is UIEdgeInsetsZero
+ */
+@property (nonatomic, assign) UIEdgeInsets extendedHitTestInsets;
+
 @end

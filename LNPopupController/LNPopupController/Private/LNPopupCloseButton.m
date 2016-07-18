@@ -137,4 +137,15 @@
 	return superSize;
 }
 
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
+{
+    if (UIEdgeInsetsEqualToEdgeInsets(self.extendedHitTestInsets, UIEdgeInsetsZero) || !self.enabled || self.hidden) {
+        return [super pointInside:point withEvent:event];
+    }
+    
+    CGRect relativeFrame = self.bounds;
+    CGRect hitFrame = UIEdgeInsetsInsetRect(relativeFrame, self.extendedHitTestInsets);
+    return CGRectContainsPoint(hitFrame, point);
+}
+
 @end
