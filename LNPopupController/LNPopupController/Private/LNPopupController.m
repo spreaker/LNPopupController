@@ -11,6 +11,7 @@
 @import ObjectiveC;
 
 static const CFTimeInterval LNPopupBarGesturePanThreshold = 0.1;
+static const CFTimeInterval LNPopupBarGesturePanSensitivityThreshold = 10;
 static const CFTimeInterval LNPopupBarGestureHeightPercentThreshold = 0.2;
 static const CGFloat        LNPopupBarGestureSnapOffset = 40;
 static const CGFloat        LNPopupBarGestureSnapOffsetIPad = 50;
@@ -430,14 +431,19 @@ static CGFloat __smoothstep(CGFloat a, CGFloat b, CGFloat x)
 			_statusBarTresholdDir = _popupControllerState == LNPopupPresentationStateOpen ? 1 : -1;
 			_tresholdToPassForStatusBarUpdate = -10;
 			
-			[self _transitionToState:LNPopupPresentationStateTransitioning animated:YES completion:nil userOriginatedTransition:NO];
-			
 			_cachedDefaultFrame = [_containerController defaultFrameForBottomDockingView_internalOrDeveloper];
 			_cachedOpenPopupFrame = [self _frameForOpenPopupBar];
 			
 		}	break;
 		case UIGestureRecognizerStateChanged:
 		{
+            CGFloat distanceY = ABS([pgr translationInView:_popupBar.superview].y);
+            if (_popupControllerState != LNPopupPresentationStateTransitioning && distanceY < LNPopupBarGesturePanSensitivityThreshold) {
+                break;
+            }
+            
+            [self _transitionToState:LNPopupPresentationStateTransitioning animated:YES completion:nil userOriginatedTransition:NO];
+            
 			CGFloat targetCenterY = MIN(_lastPopupBarLocation.y + [pgr translationInView:_popupBar.superview].y, _cachedDefaultFrame.origin.y - _popupBar.frame.size.height / 2);
 			targetCenterY = MAX(targetCenterY, _cachedOpenPopupFrame.origin.y + _popupBar.frame.size.height / 2);
 			
@@ -459,6 +465,10 @@ static CGFloat __smoothstep(CGFloat a, CGFloat b, CGFloat x)
 		case UIGestureRecognizerStateCancelled:
 		case UIGestureRecognizerStateEnded:
 		{
+            if (_popupControllerState != LNPopupPresentationStateTransitioning) {
+                break;
+            }
+            
 			BOOL panThreshold = CACurrentMediaTime() - _lastSeenMovement <= LNPopupBarGesturePanThreshold;
 			BOOL heightTreshold = [self _percentFromPopupBar] > LNPopupBarGestureHeightPercentThreshold;
 			BOOL isPanUp = [pgr velocityInView:_containerController.view].y < 0;
