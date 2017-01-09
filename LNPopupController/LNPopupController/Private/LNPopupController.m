@@ -913,6 +913,19 @@ static CGFloat __smoothstep(CGFloat a, CGFloat b, CGFloat x)
 
 #pragma mark UIGestureRecognizerDelegate
 
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    if (![gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
+        return YES;
+    }
+    
+    // Ensure it's a vertical drag
+    UIPanGestureRecognizer * panGesture = (UIPanGestureRecognizer *)gestureRecognizer;
+    CGPoint translation = [panGesture translationInView:self.popupContentView];
+    
+    return fabs(translation.x) <= fabs(translation.y);
+}
+
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
     if([NSStringFromClass(otherGestureRecognizer.class) containsString:@"Reveal"])
