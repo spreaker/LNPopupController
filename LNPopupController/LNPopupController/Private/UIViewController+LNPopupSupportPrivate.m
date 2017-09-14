@@ -154,7 +154,7 @@ static NSString* const vCUSBBase64 = @"X3ZpZXdDb250cm9sbGVyVW5kZXJsYXBzU3RhdHVzQ
 {
 	if(self._ln_popupController_nocreate.popupControllerState != LNPopupPresentationStateHidden && ![self isKindOfClass:[UITabBarController class]] && ![self isKindOfClass:[UINavigationController class]])
 	{
-		insets.bottom += self.defaultFrameForBottomDockingView_internalOrDeveloper.size.height + self._ln_popupController_nocreate.popupBar.frame.size.height;
+        insets.bottom += self.defaultFrameForBottomDockingView_internalOrDeveloper.size.height;
 	}
 	
 	[self _sCoOvIns:insets];
@@ -176,6 +176,10 @@ static NSString* const vCUSBBase64 = @"X3ZpZXdDb250cm9sbGVyVW5kZXJsYXBzU3RhdHVzQ
 	if(self._ln_popupController_nocreate.popupControllerState != LNPopupPresentationStateHidden)
 	{
 		insets.bottom += self._ln_popupController_nocreate.popupBar.frame.size.height;
+        
+        if (@available(iOS 11,*)) {
+            insets.bottom -= self.view.safeAreaInsets.bottom;
+        }
 	}
 	
 	return insets;
@@ -314,7 +318,7 @@ void _LNPopupSupportFixInsetsForViewController(UIViewController* controller, BOO
 	
 	if(self._ln_popupController_nocreate.popupControllerState != LNPopupPresentationStateHidden && [[self valueForKey:@"isBarHidden"] isEqualToNumber:@YES])
 	{
-		rv.bottom -= self._ln_popupController_nocreate.popupBar.frame.size.height;
+		rv.bottom -= self.defaultFrameForBottomDockingView_internalOrDeveloper.size.height;
 	}
 	
 	return rv;
@@ -404,8 +408,14 @@ void _LNPopupSupportFixInsetsForViewController(UIViewController* controller, BOO
 	else
 	{
 		bottomBarFrame.origin = CGPointMake(bottomBarFrame.origin.x, self.view.bounds.size.height - bottomBarFrame.size.height);
+        
+        if (@available(iOS 11, *)) {
+            CGFloat bottomeGap = self.view.safeAreaInsets.bottom;
+            bottomBarFrame.origin.y -= bottomeGap;
+            bottomBarFrame.size.height += bottomeGap;
+        }
 	}
-	
+
 	return bottomBarFrame;
 }
 

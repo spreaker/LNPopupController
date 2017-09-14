@@ -201,6 +201,17 @@ static const CFTimeInterval LNPopupBarGestureHeightPercentThreshold = 0.2;
 	return CGRectMake(defaultFrame.origin.x, defaultFrame.origin.y - _popupBar.frame.size.height, _containerController.view.bounds.size.width, _popupBar.frame.size.height);
 }
 
+- (CGFloat)_popupBarDefaultHeight
+{
+    CGFloat height = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? LNPopupBarHeightIPad : LNPopupBarHeight;
+    
+    if (@available(iOS 11.0, *)) {
+        height += _containerController.view.safeAreaInsets.bottom;
+    }
+    
+    return height;
+}
+
 - (void)_repositionPopupContent
 {
 	UIView* relativeViewForContentView = _bottomBar;
@@ -782,9 +793,9 @@ static CGFloat __smoothstep(CGFloat a, CGFloat b, CGFloat x)
 		
 		[UIView animateWithDuration:animated ? 0.5 : 0.0 delay:0.0 usingSpringWithDamping:500 initialSpringVelocity:0 options:UIViewAnimationOptionCurveEaseInOut animations:^
 		{
-			CGRect barFrame = _popupBar.frame;
-			barFrame.size.height = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? LNPopupBarHeightIPad : LNPopupBarHeight;
-			_popupBar.frame = barFrame;
+            CGRect barFrame = _popupBar.frame;
+            barFrame.size.height = [self _popupBarDefaultHeight];
+            _popupBar.frame = barFrame;
 			_popupBar.frame = [self _frameForClosedPopupBar];
 			
 			_LNPopupSupportFixInsetsForViewController(_containerController, YES);
