@@ -12,7 +12,17 @@ import MapKit
 
 class MapViewController: UIViewController, UISearchBarDelegate {
 	@IBOutlet weak var mapView: MKMapView!
+	@IBOutlet weak var bottomVisualEffectView: UIVisualEffectView!
+	@IBOutlet weak var topVisualEffectView: UIVisualEffectView!
 	private var popupContentVC: LocationsController!
+	
+	override func viewDidLoad() {
+		super.viewDidLoad()
+		
+		if #available(iOS 13.0, *) {
+			bottomVisualEffectView.effect = UIBlurEffect(style: .systemThinMaterial)
+		}
+	}
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
@@ -25,8 +35,12 @@ class MapViewController: UIViewController, UISearchBarDelegate {
 		popupContentView.popupCloseButtonStyle = .none
 		popupInteractionStyle = .snap
 		
-		popupContentVC = storyboard!.instantiateViewController(withIdentifier: "PopupContentController") as! LocationsController
-		popupContentVC.tableView.backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
+		popupContentVC = (storyboard!.instantiateViewController(withIdentifier: "PopupContentController") as! LocationsController)
+		if #available(iOS 13.0, *) {
+			popupContentVC.tableView.backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
+		} else {
+			popupContentVC.tableView.backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
+		}
 		
 		DispatchQueue.main.async {
 			self.presentPopupBar(withContentViewController: self.popupContentVC, animated: false, completion: nil)
